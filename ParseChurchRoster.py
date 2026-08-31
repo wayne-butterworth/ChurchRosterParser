@@ -1,18 +1,13 @@
-## v1 from Google AI
-
-
 import argparse
 from datetime import datetime
 import os
 import re
 from ics import Calendar, Event
 import pdfplumber
+from backports.zoneinfo import ZoneInfo
 
 # for debug printing
 from pprint import pprint
-
-from backports.zoneinfo import ZoneInfo
-
 
 def parse_pdf_roster(pdf_path, target_name):
     extracted_events = []
