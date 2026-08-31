@@ -1,0 +1,6 @@
+# log files
+debug.log
+# pdf files - samples used for testing
+*.pdf
+# dont accidenally commit the output .ics files
+*.ics
