@@ -11,16 +11,21 @@ import pdfplumber
 # for debug printing
 from pprint import pprint
 
+from backports.zoneinfo import ZoneInfo
+
 
 def parse_pdf_roster(pdf_path, target_name):
     extracted_events = []
     
-    # Complete list of expected columns provided by the user
+    # Complete list of expected columns
     known_headers = [
         "Date", "Time", "Service Leader", "Reader", "Prayers", 
         "Communion Assistant", "Welcomer", "Hospitality", "Backbone"
     ]
-    
+
+    # Timezone for calendar entries
+    local_tz = ZoneInfo("Australia/Sydney")
+
     with pdfplumber.open(pdf_path) as pdf:
         pprint(f"Opened PDF '{pdf_path}' with {len(pdf.pages)} pages.")
         for page_num, page in enumerate(pdf.pages, 1):
@@ -218,9 +223,7 @@ def parse_pdf_roster(pdf_path, target_name):
                     else:
                         continue
 
-                    start_dt = datetime.strptime(date_clean, "%d/%m/%Y").replace(
-                        hour=hour, minute=minute
-                    )
+                    start_dt = datetime.strptime(date_clean, "%d/%m/%Y").replace(hour=hour, minute=minute, tzinfo=local_tz)
                     end_dt = start_dt.replace(hour=start_dt.hour + 1)
                 except Exception:
                     pprint(f"Page {page_num}: Error parsing date/time for row: {row}")
